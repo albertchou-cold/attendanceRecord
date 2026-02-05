@@ -1,0 +1,10 @@
+# sample
+
+__pycache__/
+*.pyc
+.env
+*.db
+*.sqlite3
+.idea/
+.vscode/
+.DS_Store

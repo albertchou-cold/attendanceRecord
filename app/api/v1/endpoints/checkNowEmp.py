@@ -1,0 +1,1 @@
+"""Deprecated: checkNowEmp endpoint removed."""

@@ -1,0 +1,14 @@
+sample
+# Copy to .env and fill values
+
+dataBase_mes=mysql+pymysql://user:pass@localhost:3306/mes_db
+
+dataBase_hr=mysql+pymysql://user:pass@localhost:3306/hr_db
+
+REDIS_URL=redis://localhost:6379/0
+# REDIS_CHANNEL=state_changes
+# REDIS_LISTENER_ENABLED=1
+# SQL_ECHO=false
+# SQL_POOL_SIZE=20
+# SQL_MAX_OVERFLOW=10
+# SQL_POOL_RECYCLE=3600

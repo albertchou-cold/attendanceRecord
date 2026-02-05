@@ -1,0 +1,8 @@
+sample
+{
+  "key": "k1",
+  "old_value": "0",
+  "new_value": "1",
+  "channel": "state_changes",
+  "source": "web"
+}
