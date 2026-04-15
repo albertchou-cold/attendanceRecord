@@ -1,15 +1,13 @@
-import os
+from __future__ import annotations
+
 import redis
-from dotenv import load_dotenv
 
-load_dotenv()
-
-def get_redis_client():
-    return redis.from_url(
-        os.getenv("REDIS_URL"), 
-        decode_responses=True,
-        ssl_cert_reqs=None
-    )
+from app.config import get_settings
 
 
-redis_client = get_redis_client()
+def get_redis_client() -> redis.Redis:
+    settings = get_settings()
+    kwargs = {"decode_responses": True}
+    if settings.REDIS_SSL_INSECURE:
+        kwargs["ssl_cert_reqs"] = None
+    return redis.from_url(settings.REDIS_URL, **kwargs)

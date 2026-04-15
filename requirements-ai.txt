@@ -1,0 +1,7 @@
+# Optional AI dependencies (install only when enabling real providers)
+# pip install -r requirements-ai.txt
+
+openai>=1.40
+anthropic>=0.34
+langchain>=0.3
+langchain-openai>=0.2

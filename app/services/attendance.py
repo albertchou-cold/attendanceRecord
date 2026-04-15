@@ -11,14 +11,9 @@ from app.models.hr.hrDB import (
 )
 
 from app.schemas.attendance import AttendanceStatusRewarm  # 撈排班資訊用的schema
+from app.timezone import taipei_now
 
 from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
-
-
-
-def taipei_now() -> datetime:
-    return datetime.now(ZoneInfo("Asia/Taipei"))
 
 
 # python 的 rollback 機制 , 但主要是重新跑而已

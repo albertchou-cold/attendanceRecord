@@ -1,42 +1,67 @@
 from __future__ import annotations
 
-import os
 from collections.abc import Generator
 
-from dotenv import load_dotenv
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, create_engine
 
+from app.config import get_settings
 from app.models.base import BaseHR
-
-load_dotenv()
-
-
-def _env_bool(name: str, default: bool = False) -> bool:
-    raw = os.getenv(name)
-    if raw is None:
-        return default
-    return raw.strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
 _engine_hr: Engine | None = None
+_engine_mes: Engine | None = None
 
+
+def _build_connect_args(url: str, settings) -> dict[str, int | str]:
+    if not url.lower().startswith("mysql"):
+        return {}
+    return {
+        "connect_timeout": settings.SQL_CONNECT_TIMEOUT,
+        "read_timeout": settings.SQL_READ_TIMEOUT,
+        "write_timeout": settings.SQL_WRITE_TIMEOUT,
+        "charset": "utf8mb4",
+    }
+
+def get_DataBase_mes() -> Engine: 
+    global _engine_mes
+    if _engine_mes is not None:
+        return _engine_mes
+
+    settings = get_settings()
+    url = settings.dataBase_mes
+    if not url:
+        raise RuntimeError("Missing env var 'dataBase_mes' for MES database URL")
+
+    _engine_mes = create_engine(
+        url,
+        echo=settings.SQL_ECHO,
+        pool_size=settings.SQL_POOL_SIZE,
+        max_overflow=settings.SQL_MAX_OVERFLOW,
+        pool_recycle=settings.SQL_POOL_RECYCLE,
+        pool_pre_ping=settings.SQL_POOL_PRE_PING,
+        connect_args=_build_connect_args(url, settings),
+    )
+    return _engine_mes
 
 def get_engine_hr() -> Engine:
     global _engine_hr
     if _engine_hr is not None:
         return _engine_hr
 
-    url = os.getenv("dataBase_hr")
+    settings = get_settings()
+    url = settings.dataBase_hr
     if not url:
         raise RuntimeError("Missing env var 'dataBase_hr' for HR database URL")
 
     _engine_hr = create_engine(
         url,
-        echo=_env_bool("SQL_ECHO", False),
-        pool_size=int(os.getenv("SQL_POOL_SIZE", "20")),
-        max_overflow=int(os.getenv("SQL_MAX_OVERFLOW", "10")),
-        pool_recycle=int(os.getenv("SQL_POOL_RECYCLE", "3600")),
+        echo=settings.SQL_ECHO,
+        pool_size=settings.SQL_POOL_SIZE,
+        max_overflow=settings.SQL_MAX_OVERFLOW,
+        pool_recycle=settings.SQL_POOL_RECYCLE,
+        pool_pre_ping=settings.SQL_POOL_PRE_PING,
+        connect_args=_build_connect_args(url, settings),
     )
     return _engine_hr
 

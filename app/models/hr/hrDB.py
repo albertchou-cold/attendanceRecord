@@ -1,21 +1,18 @@
 from __future__ import annotations
 
 from datetime import datetime
-from zoneinfo import ZoneInfo
 
 from sqlalchemy import Column, JSON, UniqueConstraint
 from sqlmodel import Field
 
 from app.models.base import BaseHR
+from app.timezone import get_timezone, taipei_now
 
-
-def taipei_now() -> datetime:
-    return datetime.now(ZoneInfo("Asia/Taipei"))
 
 def to_taipei(dt: datetime) -> datetime:
     if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=ZoneInfo("UTC"))
-    return dt.astimezone(ZoneInfo("Asia/Taipei"))
+        dt = dt.replace(tzinfo=datetime.UTC)
+    return dt.astimezone(get_timezone())
 
 
 

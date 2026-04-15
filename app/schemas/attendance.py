@@ -5,13 +5,6 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from datetime import datetime
-from zoneinfo import ZoneInfo
-
-from sqlalchemy import Column, JSON, UniqueConstraint
-from sqlmodel import Field
-
-
 
 
 class AttendanceIn(BaseModel):
